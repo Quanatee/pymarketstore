@@ -14,7 +14,7 @@ class JsonRpcClient(object):
         self._session = requests.Session()
 
     def __getattr__(self, method):
-        assert self._endpoint is not None
+        # assert self._endpoint is not None
 
         def call(**kwargs):
             return self._session.post(
