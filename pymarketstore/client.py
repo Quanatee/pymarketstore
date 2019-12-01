@@ -116,11 +116,15 @@ class Client(object):
         write_request['is_variable_length'] = isvariablelength
         writer = {}
         writer['requests'] = [write_request]
-        try:
-            reply = self.rpc.call("DataService.Write", **writer)
-        except requests.exceptions.ConnectionError:
-            raise requests.exceptions.ConnectionError(
-                "Could not contact server")
+        for i in range(5):
+            try:
+                reply = self.rpc.call("DataService.Write", **writer)
+                break
+            except requests.exceptions.ConnectionError:
+                raise requests.exceptions.ConnectionError(
+                    "Could not contact server")
+                import time
+                time.sleep(3)
         reply_obj = self.rpc.codec.loads(reply.content, encoding='utf-8')
         resp = self.rpc.response(reply_obj)
         return resp
