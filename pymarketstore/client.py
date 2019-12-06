@@ -99,7 +99,7 @@ class Client(object):
                 if i > 0:
                     logger.info("Attempt {}/9 to query was successful".format(i+1))
                 break
-            except requests.exceptions.ConnectionError:
+            except:
                 logger.exception("Attempt {}/9 to query from server was unsuccessful (Connection Error)".format(i+1))
                 import time
                 time.sleep(1)
@@ -131,7 +131,7 @@ class Client(object):
                 if i > 0:
                     logger.info("Attempt {}/9 to write was successful".format(i+1))
                 break
-            except requests.exceptions.ConnectionError:
+            except:
                 logger.exception("Attempt {}/9 to write to server was unsuccessful (Connection Error)".format(i+1))
                 import time
                 time.sleep(1)
