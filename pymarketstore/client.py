@@ -93,7 +93,16 @@ class Client(object):
         if not isiterable(params):
             params = [params]
         query = self.build_query(params)
-        reply = self._request('DataService.Query', **query)
+        for i in range(9):
+            try:
+                reply = self._request('DataService.Query', **query)
+                if i > 0:
+                    logger.info("Attempt {}/9 to query was successful".format(i+1))
+                break
+            except requests.exceptions.ConnectionError:
+                logger.exception("Attempt {}/9 to query from server was unsuccessful (Connection Error)".format(i+1))
+                import time
+                time.sleep(1)
         return QueryReply(reply)
 
     def write(self, recarray, tbk, isvariablelength=False):
@@ -116,16 +125,16 @@ class Client(object):
         write_request['is_variable_length'] = isvariablelength
         writer = {}
         writer['requests'] = [write_request]
-        for i in range(5):
+        for i in range(9):
             try:
                 reply = self.rpc.call("DataService.Write", **writer)
                 if i > 0:
-                    logger.info("Attempt {}/5 to write was successful".format(i))
+                    logger.info("Attempt {}/9 to write was successful".format(i+1))
                 break
             except requests.exceptions.ConnectionError:
-                logger.exception("Attempt {}/5 to write to server was unsuccessful (Connection Error)".format(i))
+                logger.exception("Attempt {}/9 to write to server was unsuccessful (Connection Error)".format(i+1))
                 import time
-                time.sleep(3)
+                time.sleep(1)
         reply_obj = self.rpc.codec.loads(reply.content, encoding='utf-8')
         resp = self.rpc.response(reply_obj)
         return resp
