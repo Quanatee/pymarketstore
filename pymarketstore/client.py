@@ -105,7 +105,8 @@ class Client(object):
                 time.sleep(3)
         if reply is not None:
             return QueryReply(reply)
-        else return None
+        else:
+            return None
 
     def write(self, recarray, tbk, isvariablelength=False):
         data = {}
