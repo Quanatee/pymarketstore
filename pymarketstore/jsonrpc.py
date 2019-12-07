@@ -39,6 +39,8 @@ class JsonRpcClient(object):
     def response(resp):
         if 'result' in resp:
             return resp['result']
+        elif 'result' not in resp and resp['error'].get('data') is None:
+            return None
 
         if 'error' not in resp:
             raise Exception('invalid JSON-RPC protocol: missing error')
