@@ -97,10 +97,10 @@ class Client(object):
             try:
                 reply = self._request('DataService.Query', **query)
                 if i > 0:
-                    logger.info("Attempt {}/5 to query was successful".format(i+1))
+                    logger.info("Attempt {}/5 to query server was successful".format(i+1))
                 break
             except:
-                logger.exception("Attempt {}/5 to query from server was unsuccessful (Connection Error)".format(i+1))
+                logger.info("Attempt {}/5 to query server was unsuccessful (Connection Error)".format(i+1))
                 import time
                 time.sleep(3)
         if reply is not None:
@@ -135,7 +135,7 @@ class Client(object):
                     logger.info("Attempt {}/5 to write was successful".format(i+1))
                 break
             except:
-                logger.exception("Attempt {}/5 to write to server was unsuccessful (Connection Error)".format(i+1))
+                logger.info("Attempt {}/5 to write to server was unsuccessful (Connection Error)".format(i+1))
                 import time
                 time.sleep(3)
         reply_obj = self.rpc.codec.loads(reply.content, encoding='utf-8')
