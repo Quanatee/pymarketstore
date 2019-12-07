@@ -93,17 +93,19 @@ class Client(object):
         if not isiterable(params):
             params = [params]
         query = self.build_query(params)
-        for i in range(9):
+        for i in range(5):
             try:
                 reply = self._request('DataService.Query', **query)
                 if i > 0:
-                    logger.info("Attempt {}/9 to query was successful".format(i+1))
+                    logger.info("Attempt {}/5 to query was successful".format(i+1))
                 break
             except:
-                logger.exception("Attempt {}/9 to query from server was unsuccessful (Connection Error)".format(i+1))
+                logger.exception("Attempt {}/5 to query from server was unsuccessful (Connection Error)".format(i+1))
                 import time
-                time.sleep(1)
-        return QueryReply(reply)
+                time.sleep(3)
+        if reply is not None:
+            return QueryReply(reply)
+        else return None
 
     def write(self, recarray, tbk, isvariablelength=False):
         data = {}
@@ -125,16 +127,16 @@ class Client(object):
         write_request['is_variable_length'] = isvariablelength
         writer = {}
         writer['requests'] = [write_request]
-        for i in range(9):
+        for i in range(5):
             try:
                 reply = self.rpc.call("DataService.Write", **writer)
                 if i > 0:
-                    logger.info("Attempt {}/9 to write was successful".format(i+1))
+                    logger.info("Attempt {}/5 to write was successful".format(i+1))
                 break
             except:
-                logger.exception("Attempt {}/9 to write to server was unsuccessful (Connection Error)".format(i+1))
+                logger.exception("Attempt {}/5 to write to server was unsuccessful (Connection Error)".format(i+1))
                 import time
-                time.sleep(1)
+                time.sleep(3)
         reply_obj = self.rpc.codec.loads(reply.content, encoding='utf-8')
         resp = self.rpc.response(reply_obj)
         return resp
