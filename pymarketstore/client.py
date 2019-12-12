@@ -98,14 +98,14 @@ class Client(object):
                 reply = self._request('DataService.Query', **query)
                 if i > 0:
                     logger.info("Attempt {}/5 to query server was successful".format(i+1))
-                break
+                if reply is not None:
+                    return QueryReply(reply)
+                else:
+                    return None
             except:
                 logger.info("Attempt {}/5 to query server was unsuccessful (Connection Error)".format(i+1))
                 import time
                 time.sleep(3)
-        if reply is not None:
-            return QueryReply(reply)
-        else:
             return None
 
     def write(self, recarray, tbk, isvariablelength=False):
