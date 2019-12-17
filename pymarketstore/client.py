@@ -101,11 +101,12 @@ class Client(object):
                 if reply is not None:
                     return QueryReply(reply)
                 else:
-                    return None
+                    raise Exception('reply returned None')
             except:
                 logger.info("Attempt {}/5 to query server was unsuccessful (Connection Error)".format(i+1))
                 import time
                 time.sleep(3)
+            logger.info("Attempts to query server failed.")
             return None
 
     def write(self, recarray, tbk, isvariablelength=False):
