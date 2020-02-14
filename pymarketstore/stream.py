@@ -23,7 +23,7 @@ class StreamConn(object):
         })
         ws.send(msg, opcode=ABNF.OPCODE_BINARY)
 
-    def run(self, streams):
+    async def run(self, streams):
         ws = self._connect()
         try:
             self._subscribe(ws, streams)
@@ -32,7 +32,7 @@ class StreamConn(object):
                 msg = msgpack.loads(r, encoding='utf-8')
                 key = msg.get('key')
                 if key is not None:
-                    self._dispatch(key, msg)
+                    await self._dispatch(key, msg)
         finally:
             ws.close()
 
