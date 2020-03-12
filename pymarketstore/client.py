@@ -93,13 +93,14 @@ class Client(object):
         if not isiterable(params):
             params = [params]
         query = self.build_query(params)
+        reply = None
         for i in range(5):
             try:
                 reply = self._request('DataService.Query', **query)
                 if i > 0:
                     logger.info("Attempt {}/5 to query server was successful".format(i+1))
                 if reply is not None:
-                    return QueryReply(reply)
+                    break
                 else:
                     raise Exception('reply returned None')
             except:
@@ -107,6 +108,9 @@ class Client(object):
                 import time
                 time.sleep(3)
             logger.info("Attempts to query server failed.")
+        if reply is not None:
+            return QueryReply(reply)
+        else:
             return None
 
     def write(self, recarray, tbk, isvariablelength=False):
