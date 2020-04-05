@@ -133,16 +133,18 @@ class Client(object):
         write_request['is_variable_length'] = isvariablelength
         writer = {}
         writer['requests'] = [write_request]
-        for i in range(5):
+        i = 0
+        while True:
+            i += 1
             try:
                 reply = self.rpc.call("DataService.Write", **writer)
                 if i > 0:
-                    logger.info("Attempt {}/5 to write was successful".format(i+1))
+                    logger.info("Attempt {} to write was successful".format(i))
                 break
             except:
-                logger.info("Attempt {}/5 to write to server was unsuccessful (Connection Error)".format(i+1))
+                logger.info("Attempt {} to write to server was unsuccessful (Connection Error)".format(i))
                 import time
-                time.sleep(3)
+                time.sleep(5)
         reply_obj = self.rpc.codec.loads(reply.content, encoding='utf-8')
         resp = self.rpc.response(reply_obj)
         return resp
