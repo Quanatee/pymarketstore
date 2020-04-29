@@ -144,7 +144,7 @@ class Client(object):
             except:
                 logger.info("Attempt {} to write to server was unsuccessful (Connection Error)".format(i))
                 import time
-                time.sleep(5)
+                time.sleep(1)
         reply_obj = self.rpc.codec.loads(reply.content, encoding='utf-8')
         resp = self.rpc.response(reply_obj)
         return resp
