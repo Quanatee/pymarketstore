@@ -94,19 +94,19 @@ class Client(object):
             params = [params]
         query = self.build_query(params)
         reply = None
-        for i in range(5):
+        for i in range(3):
             try:
                 reply = self._request('DataService.Query', **query)
                 if i > 0:
-                    logger.info("Attempt {}/5 to query server was successful".format(i+1))
+                    logger.info("Attempt {}/3 to query server was successful".format(i+1))
                 if reply is not None:
                     break
                 else:
                     raise Exception('reply returned None')
             except:
-                logger.info("Attempt {}/5 to query server was unsuccessful (Connection Error)".format(i+1))
+                logger.info("Attempt {}/3 to query server was unsuccessful (Connection Error)".format(i+1))
                 import time
-                time.sleep(3)
+                time.sleep(1)
             logger.info("Attempts to query server failed.")
         if reply is not None:
             return QueryReply(reply)
